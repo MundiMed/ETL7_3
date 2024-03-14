@@ -92,7 +92,8 @@ class ImportController extends Controller
         
         }
         
-        if($value?->$field === null){
+        //if($value?->$field === null){ // só faz sentido para php 8.1
+        if(is_null($value) || $value->$field === null){
             $val = 0;
         }else{
             $val = $value->$field;
@@ -175,7 +176,8 @@ class ImportController extends Controller
                 return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);      
             }
             
-            if($value?->$field === null){
+            //if($value?->$field === null){ // só faz sentido para php 8.1
+            if(is_null($value) || $value->$field === null){
                 $val = 0;
             }else{
                 $val = $value->$field;
@@ -300,7 +302,9 @@ class ImportController extends Controller
                 Log::error("Erro na " . $db.$tb);
                 return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);      
             }
-            if($value?->$field === null){
+
+            //if($value?->$field === null){ só faz sentido para o php 8.1
+            if(is_null($value) || $value->$field === null){
                 $val = 0;
             }else{
                 $val = $value->$field;
@@ -371,7 +375,8 @@ class ImportController extends Controller
                 Log::error("Erro na " . $db.$tb);
                 return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);      
             }
-            if($value?->$field === null){
+            //if($value?->$field === null){ só faz sentido para o php8.1
+            if(is_null($value) || $value->$field === null){
                 $val = 0;
             }else{
                 $val = $value->$field;
