@@ -17,6 +17,6 @@ use App\Http\Controllers\ImportController;
 */
 
 Route::controller(ImportController::class)->group(function () {
-    Route::post('truncate', [ImportController::class, 'truncateTables']);
-    Route::post('migrate', [ImportController::class, 'index']);
+    Route::get('truncate', [ImportController::class, 'truncateTables']);
+    Route::get('migrate', [ImportController::class, 'index']);
 });
