@@ -1095,7 +1095,7 @@ return [
         ],
         //*/
         //*
-        // NOVA BASE UNIFICADA
+        // NOVA BASE UNIFICADAs
         'mysql_mundimed_v1' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
