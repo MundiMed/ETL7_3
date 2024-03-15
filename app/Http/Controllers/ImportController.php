@@ -44,7 +44,7 @@ class ImportController extends Controller
     
                 $now = new \DateTime();
                 $now = $now->format('Y-m-d H:i:s');    
-                Log::debug('Iniciado sistema '.$i.' em '.$now);
+               // Log::debug('Iniciado sistema '.$i.' em '.$now);
                 
                 foreach ($tables as $key => $tab) {
                     $db = substr($tab,0,8);
