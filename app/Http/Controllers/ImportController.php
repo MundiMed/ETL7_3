@@ -12,7 +12,7 @@ class ImportController extends Controller
 {
     public function truncateTables(){
        // echo "aqui";
-        ///*
+        /*
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_truncate_all_tables()');
             echo "Limpeza de tabelas XDB realizada com sucesso";
@@ -25,6 +25,7 @@ class ImportController extends Controller
 
         }
         //*/
+        echo "Limpeza de tabelas XDB está desabilitada";
 
     }
 
@@ -255,6 +256,7 @@ class ImportController extends Controller
             case 'med_laboratorio': $field = 'id';break; 
             case 'med_produtos': $field = 'id';break; 
             case 'med_referencia': $field = 'id';break; 
+            case 'medicamentos_funeas': $field = 'id';break; 
             case 'mov_avalicao_os': $field = 'id';break; 
             case 'mov_orcamento_os': $field = 'orc_codigo';break; 
             case 'mov_orcamento_os_itens': $field = 'mov_orcamento_os_orc_codigo';break; 
