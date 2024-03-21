@@ -293,6 +293,10 @@ class ImportController extends Controller
                 $isValid = false;
             }
         }
+
+        if($systemId != 11 && $tb == 'medicamentos_funeas'){
+            $isValid = false;
+        }
         
         if($isValid){
 
