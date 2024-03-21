@@ -1099,11 +1099,19 @@ return [
         'mysql_mundimed_v1' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
+            
+            //'host' => env('DB_HOST', 'localhost'),
+            //'port' => env('DB_PORT', '3306'),
+            //'database' => env('DB_DATABASE', 'mundimed_v1'),
+            //'username' => env('DB_USERNAME', 'root'),
+            //'password' => env('DB_PASSWORD', 'Mechatron@2024'),
+
             'host' => env('DB_HOST', '187.102.244.36'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'medmecom_mundimed_unificada'),
             'username' => env('DB_USERNAME', 'medmecom'),
             'password' => env('DB_PASSWORD', 'Cox@2024'),
+
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

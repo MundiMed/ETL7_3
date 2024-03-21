@@ -12,7 +12,7 @@ class ImportController extends Controller
 {
     public function truncateTables(){
        // echo "aqui";
-        /*
+        //*
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_truncate_all_tables()');
             echo "Limpeza de tabelas XDB realizada com sucesso";
@@ -25,7 +25,7 @@ class ImportController extends Controller
 
         }
         //*/
-        echo "Limpeza de tabelas XDB está desabilitada";
+       // echo "Limpeza de tabelas XDB está desabilitada";
 
     }
 
