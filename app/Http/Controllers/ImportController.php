@@ -11,8 +11,6 @@ set_time_limit(0);
 class ImportController extends Controller
 {
     public function truncateTables(){
-       // echo "aqui";
-        //*
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_truncate_all_tables()');
             echo "Limpeza de tabelas XDB realizada com sucesso";
@@ -24,9 +22,7 @@ class ImportController extends Controller
             return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
 
         }
-        //*/
-       // echo "Limpeza de tabelas XDB está desabilitada";
-
+      
     }
 
     public function index()
@@ -139,7 +135,7 @@ class ImportController extends Controller
 
         if($systemId == 1){
             
-            $systemId = 0;
+            $systemId = null;
             $field = '';
             
             switch ($tb) {
@@ -260,12 +256,14 @@ class ImportController extends Controller
             case 'mov_avalicao_os': $field = 'id';break; 
             case 'mov_orcamento_os': $field = 'orc_codigo';break; 
             case 'mov_orcamento_os_itens': $field = 'mov_orcamento_os_orc_codigo';break; 
+            case 'mov_orcamento_os_itens_lote': $field = 'oit_sequencia';break; 
             case 'mov_os': $field = 'os_codigo';break; 
             case 'mov_os_check_list': $field = 'mov_orcamento_os_orc_codigo';break; 
             case 'mov_os_endereco': $field = 'id_endereco';break; 
+            case 'mov_os_lote': $field = 'id_lote';break; 
             case 'mov_os_obs': $field = 'pob_sequencia';break; 
             case 'mov_os_orcamentistas': $field = 'os_data_cad';break; 
-            case 'mov_os_status': $field = 'id';break; 
+            case 'mov_os_status': $field = 'id';break;// ?
             case 'sc_log': $field = 'id';break; 
             case 'sis_filial': $field = 'fil_codigo';break; 
             case 'sis_nivel_acesso': $field = 'niv_codigo';break; //?
@@ -353,7 +351,7 @@ class ImportController extends Controller
     public function conn_precos($db, $tb, $systemId){
         if($systemId == 1 || $systemId == 17){
             if($systemId == 1){
-                $systemId = 0;
+                $systemId = null;
             }
             $field = '';
             
