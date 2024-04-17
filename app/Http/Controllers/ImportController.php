@@ -20,9 +20,46 @@ class ImportController extends Controller
             Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
             Log::error("Erro ao truncar: " . $th->getMessage());
             return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
+        }      
+    }
 
-        }
-      
+    public function callSPInsertApprovedServiceOrderItens(){
+        try {
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_order_itens()');
+            echo "Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso";
+            Log::debug('Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso');
+
+        } catch (\Throwable $th) {
+            Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
+            Log::error("Erro ao inserir ordens de serviço aprovadas: " . $th->getMessage());
+            return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
+        }      
+    }
+
+    public function callSPInsertApprovedServiceOrders(){
+        try {
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders()');
+            echo "Ordens de Serviços Aprovadas, foram inseridas com sucesso";
+            Log::debug('Ordens de Serviços Aprovadas, foram inseridas com sucesso');
+
+        } catch (\Throwable $th) {
+            Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
+            Log::error("Erro ao inserir ordens de serviço aprovadas: " . $th->getMessage());
+            return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
+        }      
+    }
+
+    public function callSPInsertAccreditedSuppliers(){
+        try {
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_accredited_suppliers()');
+            echo "Cadastro de credenciados foi realizada com sucesso";
+            Log::debug('Cadastro de credenciados foi realizada com sucesso');
+
+        } catch (\Throwable $th) {
+            Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
+            Log::error("Erro ao cadastrar novos credenciados: " . $th->getMessage());
+            return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
+        }      
     }
 
     public function index()
@@ -298,7 +335,6 @@ class ImportController extends Controller
         
         if($isValid){
 
-
             try {
                 $value = DB::connection('mysql_mundimed_v1')->table($db.$tb)->select($field)->where('system_id', $systemId)->orderBy($field, 'desc')->limit(1)->first();
             } catch (\Throwable $th) {
@@ -307,7 +343,6 @@ class ImportController extends Controller
                 return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);      
             }
 
-            //if($value?->$field === null){ só faz sentido para o php 8.1
             if(is_null($value) || $value->$field === null){
                 $val = 0;
             }else{
