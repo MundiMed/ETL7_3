@@ -25,7 +25,7 @@ class ImportController extends Controller
 
     public function callSPInsertApprovedServiceOrderItens(){
         try {
-            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_order_itens()');
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_order_itens(0)');
             echo "Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso";
             Log::debug('Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso');
 
@@ -38,7 +38,7 @@ class ImportController extends Controller
 
     public function callSPInsertApprovedServiceOrders(){
         try {
-            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders()');
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders(0)');
             echo "Ordens de Serviços Aprovadas, foram inseridas com sucesso";
             Log::debug('Ordens de Serviços Aprovadas, foram inseridas com sucesso');
 
@@ -51,7 +51,7 @@ class ImportController extends Controller
 
     public function callSPInsertAccreditedSuppliers(){
         try {
-            DB::connection('mysql_mundimed_v1')->select('call sp_insert_accredited_suppliers()');
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_accredited_suppliers(0)');
             echo "Cadastro de credenciados foi realizada com sucesso";
             Log::debug('Cadastro de credenciados foi realizada com sucesso');
 
