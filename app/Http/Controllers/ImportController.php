@@ -69,7 +69,7 @@ class ImportController extends Controller
            
             for($i = 1; $i<=$qtd;$i++){
                 DB::connection('mysql_mundimed_v1')->select('call sp_create_approved_orders('.$i.')');
-            } 
+            }  
            
             DB::connection('mysql_mundimed_v1')->select('call sp_update_products_approved_orders()');
            
