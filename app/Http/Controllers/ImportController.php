@@ -25,7 +25,7 @@ class ImportController extends Controller
 
     public function callSPInsertApprovedServiceOrderItens(){
         try {
-            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_order_itens(0)');
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_order_itens()');
             echo "Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso";
             Log::debug('Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso');
 
@@ -38,7 +38,7 @@ class ImportController extends Controller
 
     public function callSPInsertApprovedServiceOrders(){
         try {
-            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders(0)');
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders()');
             echo "Ordens de Serviços Aprovadas, foram inseridas com sucesso";
             Log::debug('Ordens de Serviços Aprovadas, foram inseridas com sucesso');
 
@@ -51,9 +51,31 @@ class ImportController extends Controller
 
     public function callSPInsertAccreditedSuppliers(){
         try {
-            DB::connection('mysql_mundimed_v1')->select('call sp_insert_accredited_suppliers(0)');
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_accredited_suppliers()');
             echo "Cadastro de credenciados foi realizada com sucesso";
             Log::debug('Cadastro de credenciados foi realizada com sucesso');
+
+        } catch (\Throwable $th) {
+            Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
+            Log::error("Erro ao cadastrar novos credenciados: " . $th->getMessage());
+            return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
+        }      
+    }
+
+    public function callSPCreateApprovedOrders(){
+        try {
+           
+            $qtd = intval(env('SYSTEMS_QUANTITY'));
+           
+            for($i = 1; $i<=$qtd;$i++){
+                DB::connection('mysql_mundimed_v1')->select('call sp_create_approved_orders('.$i.')');
+            }
+           
+            DB::connection('mysql_mundimed_v1')->select('call sp_update_products_approved_orders()');
+           
+           
+            echo "Cadastro de ordens aprovadas foi realizada com sucesso";
+            Log::debug('Cadastro de ordens aprovadas foi realizada com sucesso');
 
         } catch (\Throwable $th) {
             Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
