@@ -65,6 +65,8 @@ class ImportController extends Controller
     public function callSPCreateApprovedOrders(){
         try {
            
+            DB::connection('mysql_mundimed_v1')->select('call sp_truncate_approved_orders()');
+
             $qtd = intval(env('SYSTEMS_QUANTITY'));
            
             for($i = 1; $i<=$qtd;$i++){
