@@ -96,7 +96,7 @@ class ImportController extends Controller
             $tables = DB::connection('mysql_mundimed_v1')->select('SHOW TABLES LIKE "xdb%"');
             $tables = array_map('current', $tables);
            
-            $qtd = intval(env('SYSTEMS_QUANTITY'));
+            $qtd = DB::connection('mysql_mundimed_v1')->select('select count(*) as qtd from systems where st_active = 1');
            
             for($i = 1; $i<=$qtd;$i++){
     
