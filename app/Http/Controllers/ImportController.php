@@ -67,7 +67,7 @@ class ImportController extends Controller
            
             DB::connection('mysql_mundimed_v1')->select('call sp_truncate_approved_orders()');
 
-            $qtd = intval(env('SYSTEMS_QUANTITY'));
+            $qtd = DB::connection('mysql_mundimed_v1')->select('select count(*) as qtd from systems where st_active = 1');
            
             for($i = 1; $i<=$qtd;$i++){
                 DB::connection('mysql_mundimed_v1')->select('call sp_create_approved_orders('.$i.')');
