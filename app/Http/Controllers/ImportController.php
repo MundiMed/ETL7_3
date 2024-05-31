@@ -75,10 +75,18 @@ class ImportController extends Controller
             }  
            
             DB::connection('mysql_mundimed_v1')->select('call sp_update_products_approved_orders()');
-           
-           
             echo "Cadastro de ordens aprovadas foi realizada com sucesso";
             Log::debug('Cadastro de ordens aprovadas foi realizada com sucesso');
+
+            DB::connection('mysql_mundimed_v1')->select('call sp_create_approved_orders_losing_suppliers()');
+            echo "Cadastro de ordens recusadas foi realizada com sucesso";
+            Log::debug('Cadastro de ordens recusadas foi realizada com sucesso');
+
+            for($i = 1; $i<=$qtd;$i++){
+                DB::connection('mysql_mundimed_v1')->select('call sp_update_approved_orders_losing_suppliers('.$i.')');
+            } 
+            echo "Atualização do atributo de ordens recusadas foi realizada com sucesso";
+            Log::debug('Atualização do atributo de ordens recusadas foi realizada com sucesso');
 
         } catch (\Throwable $th) {
             Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
@@ -86,6 +94,8 @@ class ImportController extends Controller
             return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
         }      
     }
+
+
 
     public function index()
     {
