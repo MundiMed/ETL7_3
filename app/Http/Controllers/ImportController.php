@@ -103,23 +103,15 @@ class ImportController extends Controller
         $hi = $hi->format('Y-m-d H:i:s');
 
         try {
-            //code...
             $tables = DB::connection('mysql_mundimed_v1')->select('SHOW TABLES LIKE "xdb%"');
             $tables = array_map('current', $tables);
-           
-            //$qtd = DB::connection('mysql_mundimed_v1')->select('select count(*) as qtd from systems where st_active = 1');
             $qtd = intval(env('SYSTEMS_QUANTITY'));
-           
             for($i = 1; $i<=$qtd;$i++){
-    
                 $now = new \DateTime();
                 $now = $now->format('Y-m-d H:i:s');    
-               // Log::debug('Iniciado sistema '.$i.' em '.$now);
-                
                 foreach ($tables as $key => $tab) {
                     $db = substr($tab,0,8);
                     $tb = substr_replace($tab, "", 0, 8);
-                   // Log::debug('Iniciado sistema '. $i.' na tabela '.$db.$tb);
                     switch ($db) {
                         case 'xdb_ace_': $this->conn_acervo($db, $tb, $i); break;
                         case 'xdb_cre_': $this->conn_credenciados($db, $tb, $i); break;
@@ -129,16 +121,45 @@ class ImportController extends Controller
                     }
                 }
             }        
-    
             $hf = new \DateTime();
             $hf = $hf->format('Y-m-d H:i:s');
-         
             Log::debug('Iniciado em '.$hi.' e conluído em '.$hf);
         } catch (\Throwable $th) {
             Log::error("Erro ao identificar todas as tabelas: " . $th->getMessage());
             return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
         }
-     
+    }
+    public function index2()
+    {
+        $hi = new \DateTime();
+        $hi = $hi->format('Y-m-d H:i:s');
+        try {
+            $tables = DB::connection('mysql_mundimed_v1')->select('SHOW TABLES LIKE "xdb%"');
+            $tables = array_map('current', $tables);
+            $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
+            $systems = array_map('current', $systems);
+            foreach ($systems as $key => $i) {
+                $now = new \DateTime();
+                $now = $now->format('Y-m-d H:i:s');    
+                foreach ($tables as $key => $tab) {
+                    $db = substr($tab,0,8);
+                    $tb = substr_replace($tab, "", 0, 8);
+                    switch ($db) {
+                        case 'xdb_ace_': $this->conn_acervo($db, $tb, $i); break;
+                        case 'xdb_cre_': $this->conn_credenciados($db, $tb, $i); break;
+                        case 'xdb_med_': $this->conn_medicamentos($db, $tb, $i); break;
+                        case 'xdb_pre_': $this->conn_precos($db, $tb, $i); break;
+                        default: break;
+                    }
+                }
+            }
+            $hf = new \DateTime();
+            $hf = $hf->format('Y-m-d H:i:s');
+            Log::debug('Iniciado em '.$hi.' e conluído em '.$hf);
+        } catch (\Throwable $th) {
+            Log::error("Erro ao identificar todas as tabelas: " . $th->getMessage());
+            return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
+        }
     }
 
     public function conn_acervo($db, $tb, $systemId){
