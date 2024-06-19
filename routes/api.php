@@ -18,7 +18,7 @@ use App\Http\Controllers\ImportController;
 
 Route::controller(ImportController::class)->group(function () {
     Route::get('truncate', [ImportController::class, 'truncateTables']);
-    Route::get('migrate', [ImportController::class, 'index2']);
+    Route::get('migrate', [ImportController::class, 'index']);
     Route::get('insert_approved_service_order_itens', [ImportController::class, 'callSPInsertApprovedServiceOrderItens']);
     Route::get('insert_approved_service_orders', [ImportController::class, 'callSPInsertApprovedServiceOrders']);
     Route::get('insert_accredited_suppliers', [ImportController::class, 'callSPInsertAccreditedSuppliers']);

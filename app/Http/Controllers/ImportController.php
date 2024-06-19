@@ -14,7 +14,7 @@ class ImportController extends Controller
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_truncate_all_tables()');
             echo "01 - Limpeza de tabelas XDB realizada com sucesso";
-            Log::debug('Limpeza de tabelas XDB realizada com sucesso');
+            Log::debug('01 - Limpeza de tabelas XDB realizada com sucesso');
 
         } catch (\Throwable $th) {
             Log::error("01 - Erro ao acessar o banco de dados: " . $th->getMessage());
@@ -26,22 +26,8 @@ class ImportController extends Controller
     public function callSPInsertApprovedServiceOrderItens(){
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_order_itens()');
-            echo "02 - Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso";
-            Log::debug('02 - Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso');
-
-        } catch (\Throwable $th) {
-            Log::error("02 - Erro ao acessar o banco de dados: " . $th->getMessage());
-            Log::error("02 - Erro ao inserir ordens de serviço aprovadas: " . $th->getMessage());
-            return response()->json(['erro' => '02 - Ocorreu um erro na operação com o banco de dados.'], 500);
-        }      
-    }
-
-    public function callSPInsertApprovedServiceOrders(){
-        try {
-            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders()');
-            echo "03- Ordens de Serviços Aprovadas, foram inseridas com sucesso";
-            Log::debug('Ordens de Serviços Aprovadas, foram inseridas com sucesso');
-
+            echo "03 - Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso";
+            Log::debug('03 - Ordens de Serviços (ITENS) Aprovadas, foram inseridas com sucesso');
         } catch (\Throwable $th) {
             Log::error("03 - Erro ao acessar o banco de dados: " . $th->getMessage());
             Log::error("03 - Erro ao inserir ordens de serviço aprovadas: " . $th->getMessage());
@@ -49,16 +35,27 @@ class ImportController extends Controller
         }      
     }
 
+    public function callSPInsertApprovedServiceOrders(){
+        try {
+            DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders()');
+            echo "04- Ordens de Serviços Aprovadas, foram inseridas com sucesso";
+            Log::debug('Ordens de Serviços Aprovadas, foram inseridas com sucesso');
+        } catch (\Throwable $th) {
+            Log::error("04 - Erro ao acessar o banco de dados: " . $th->getMessage());
+            Log::error("04 - Erro ao inserir ordens de serviço aprovadas: " . $th->getMessage());
+            return response()->json(['erro' => '04 - Ocorreu um erro na operação com o banco de dados.'], 500);
+        }      
+    }
+
     public function callSPInsertAccreditedSuppliers(){
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_insert_accredited_suppliers()');
-            echo "04 - Cadastro de credenciados foi realizada com sucesso";
+            echo "05 - Cadastro de credenciados foi realizada com sucesso";
             Log::debug('04 - Cadastro de credenciados foi realizada com sucesso');
-
         } catch (\Throwable $th) {
-            Log::error("04 -  Erro ao acessar o banco de dados: " . $th->getMessage());
-            Log::error("04 - Erro ao cadastrar novos credenciados: " . $th->getMessage());
-            return response()->json(['erro' => '04 - Ocorreu um erro na operação com o banco de dados.'], 500);
+            Log::error("05 -  Erro ao acessar o banco de dados: " . $th->getMessage());
+            Log::error("05 - Erro ao cadastrar novos credenciados: " . $th->getMessage());
+            return response()->json(['erro' => '05 - Ocorreu um erro na operação com o banco de dados.'], 500);
         }      
     }
 
@@ -67,26 +64,28 @@ class ImportController extends Controller
            
             DB::connection('mysql_mundimed_v1')->select('call sp_truncate_approved_orders()');
 
-            //$qtd = DB::connection('mysql_mundimed_v1')->select('select count(*) as qtd from systems where st_active = 1');
-            $qtd = intval(env('SYSTEMS_QUANTITY'));
-            
-            for($i = 1; $i<=$qtd;$i++){
+            $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
+            $systems = array_map('current', $systems);
+            foreach ($systems as $key => $i) {
                 DB::connection('mysql_mundimed_v1')->select('call sp_create_approved_orders('.$i.')');
-            }  
+            }
            
             DB::connection('mysql_mundimed_v1')->select('call sp_update_products_approved_orders()');
-            echo "Cadastro de ordens aprovadas foi realizada com sucesso";
-            Log::debug('Cadastro de ordens aprovadas foi realizada com sucesso');
+            echo "06 - Cadastro de ordens aprovadas foi realizada com sucesso";
+            Log::debug('06 - Cadastro de ordens aprovadas foi realizada com sucesso');
 
             DB::connection('mysql_mundimed_v1')->select('call sp_create_approved_orders_losing_suppliers()');
-            echo "Cadastro de ordens recusadas foi realizada com sucesso";
-            Log::debug('Cadastro de ordens recusadas foi realizada com sucesso');
+            echo "07 - Cadastro de ordens recusadas foi realizada com sucesso";
+            Log::debug('07 - Cadastro de ordens recusadas foi realizada com sucesso');
 
-            for($i = 1; $i<=$qtd;$i++){
+            $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
+            $systems = array_map('current', $systems);
+            foreach ($systems as $key => $i) {
                 DB::connection('mysql_mundimed_v1')->select('call sp_update_approved_orders_losing_suppliers('.$i.')');
-            } 
-            echo "Atualização do atributo de ordens recusadas foi realizada com sucesso";
-            Log::debug('Atualização do atributo de ordens recusadas foi realizada com sucesso');
+            }
+            
+            echo "08 - Atualização do atributo de ordens recusadas foi realizada com sucesso";
+            Log::debug('08 - Atualização do atributo de ordens recusadas foi realizada com sucesso');
 
         } catch (\Throwable $th) {
             Log::error("Erro ao acessar o banco de dados: " . $th->getMessage());
@@ -95,41 +94,7 @@ class ImportController extends Controller
         }      
     }
 
-
-
     public function index()
-    {
-        $hi = new \DateTime();
-        $hi = $hi->format('Y-m-d H:i:s');
-
-        try {
-            $tables = DB::connection('mysql_mundimed_v1')->select('SHOW TABLES LIKE "xdb%"');
-            $tables = array_map('current', $tables);
-            $qtd = intval(env('SYSTEMS_QUANTITY'));
-            for($i = 1; $i<=$qtd;$i++){
-                $now = new \DateTime();
-                $now = $now->format('Y-m-d H:i:s');    
-                foreach ($tables as $key => $tab) {
-                    $db = substr($tab,0,8);
-                    $tb = substr_replace($tab, "", 0, 8);
-                    switch ($db) {
-                        case 'xdb_ace_': $this->conn_acervo($db, $tb, $i); break;
-                        case 'xdb_cre_': $this->conn_credenciados($db, $tb, $i); break;
-                        case 'xdb_med_': $this->conn_medicamentos($db, $tb, $i); break;
-                        case 'xdb_pre_': $this->conn_precos($db, $tb, $i); break;
-                        default: break;
-                    }
-                }
-            }        
-            $hf = new \DateTime();
-            $hf = $hf->format('Y-m-d H:i:s');
-            Log::debug('Iniciado em '.$hi.' e conluído em '.$hf);
-        } catch (\Throwable $th) {
-            Log::error("Erro ao identificar todas as tabelas: " . $th->getMessage());
-            return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
-        }
-    }
-    public function index2()
     {
         $hi = new \DateTime();
         $hi = $hi->format('Y-m-d H:i:s');
@@ -155,9 +120,9 @@ class ImportController extends Controller
             }
             $hf = new \DateTime();
             $hf = $hf->format('Y-m-d H:i:s');
-            Log::debug('Iniciado em '.$hi.' e conluído em '.$hf);
+            Log::debug('02 - Iniciado em '.$hi.' e conluído em '.$hf);
         } catch (\Throwable $th) {
-            Log::error("Erro ao identificar todas as tabelas: " . $th->getMessage());
+            Log::error("02 - Erro ao identificar todas as tabelas: " . $th->getMessage());
             return response()->json(['erro' => 'Ocorreu um erro na operação com o banco de dados.'], 500);
         }
     }
