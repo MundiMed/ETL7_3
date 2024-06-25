@@ -51,7 +51,7 @@ class ImportController extends Controller
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_insert_accredited_suppliers()');
             echo "05 - Cadastro de credenciados foi realizada com sucesso";
-            Log::debug('04 - Cadastro de credenciados foi realizada com sucesso');
+            Log::debug('05 - Cadastro de credenciados foi realizada com sucesso');
         } catch (\Throwable $th) {
             Log::error("05 -  Erro ao acessar o banco de dados: " . $th->getMessage());
             Log::error("05 - Erro ao cadastrar novos credenciados: " . $th->getMessage());
