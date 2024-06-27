@@ -38,8 +38,8 @@ class ImportController extends Controller
     public function callSPInsertApprovedServiceOrders(){
         try {
             DB::connection('mysql_mundimed_v1')->select('call sp_insert_approved_service_orders()');
-            echo "04- Ordens de Serviços Aprovadas, foram inseridas com sucesso";
-            Log::debug('Ordens de Serviços Aprovadas, foram inseridas com sucesso');
+            echo "04 - Ordens de Serviços Aprovadas, foram inseridas com sucesso";
+            Log::debug('04 - Ordens de Serviços Aprovadas, foram inseridas com sucesso');
         } catch (\Throwable $th) {
             Log::error("04 - Erro ao acessar o banco de dados: " . $th->getMessage());
             Log::error("04 - Erro ao inserir ordens de serviço aprovadas: " . $th->getMessage());
@@ -64,9 +64,11 @@ class ImportController extends Controller
            
             DB::connection('mysql_mundimed_v1')->select('call sp_truncate_approved_orders()');
 
-            $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
-            $systems = array_map('current', $systems);
-            foreach ($systems as $key => $i) {
+            //$systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
+            //$systems = array_map('current', $systems);
+            //foreach ($systems as $key => $i) {
+            $qtd = intval(env('SYSTEMS_QUANTITY'));
+            for($i = 1; $i<=$qtd;$i++){    
                 DB::connection('mysql_mundimed_v1')->select('call sp_create_approved_orders('.$i.')');
             }
            
@@ -78,9 +80,11 @@ class ImportController extends Controller
             echo "07 - Cadastro de ordens recusadas foi realizada com sucesso";
             Log::debug('07 - Cadastro de ordens recusadas foi realizada com sucesso');
 
-            $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
-            $systems = array_map('current', $systems);
-            foreach ($systems as $key => $i) {
+            //$systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
+            //$systems = array_map('current', $systems);
+            //foreach ($systems as $key => $i) {
+            $qtd = intval(env('SYSTEMS_QUANTITY'));
+            for($i = 1; $i<=$qtd;$i++){
                 DB::connection('mysql_mundimed_v1')->select('call sp_update_approved_orders_losing_suppliers('.$i.')');
             }
             
@@ -101,9 +105,12 @@ class ImportController extends Controller
         try {
             $tables = DB::connection('mysql_mundimed_v1')->select('SHOW TABLES LIKE "xdb%"');
             $tables = array_map('current', $tables);
-            $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
-            $systems = array_map('current', $systems);
-            foreach ($systems as $key => $i) {
+           // $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
+           // $systems = array_map('current', $systems);
+           //        foreach ($systems as $key => $i) {
+            $qtd = intval(env('SYSTEMS_QUANTITY'));
+            for($i = 1; $i<=$qtd;$i++){
+    
                 $now = new \DateTime();
                 $now = $now->format('Y-m-d H:i:s');    
                 foreach ($tables as $key => $tab) {
