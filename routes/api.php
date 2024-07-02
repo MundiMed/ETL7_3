@@ -28,6 +28,7 @@ Route::controller(ImportController::class)->group(function () {
     Route::get('insert_approved_service_orders', [ImportController::class, 'callSPInsertApprovedServiceOrders']);
     Route::get('insert_accredited_suppliers', [ImportController::class, 'callSPInsertAccreditedSuppliers']);
     Route::get('create_approved_orders', [ImportController::class, 'callSPCreateApprovedOrders']);
+    Route::get('create_quotations_map', [ImportController::class, 'callSPCreateQuotationsMap']);
 
 
 });
