@@ -121,7 +121,11 @@ class ImportController extends Controller
         try {           
             $hi = new \DateTime();
             $hi = $hi->format('Y-m-d H:i:s');
-            DB::connection('mysql_mundimed_v1')->select('call sp_create_quotations_map()');
+            $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
+            $systems = array_map('current', $systems);
+            foreach ($systems as $key => $i) {
+                DB::connection('mysql_mundimed_v1')->select('call sp_create_quotations_map()');
+            }
             $hf = new \DateTime();
             $hf = $hf->format('Y-m-d H:i:s');
             echo "09 - Cadastro do MAPA de Cotações foi realizada com sucesso";
