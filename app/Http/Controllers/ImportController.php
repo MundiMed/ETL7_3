@@ -121,6 +121,7 @@ class ImportController extends Controller
         try {           
             $hi = new \DateTime();
             $hi = $hi->format('Y-m-d H:i:s');
+            DB::connection('mysql_mundimed_v1')->select('call st_truncate_quotation_maps()');
             $systems = DB::connection('mysql_mundimed_v1')->select('select id from systems where situation_id = 1');
             $systems = array_map('current', $systems);
             foreach ($systems as $key => $i) {
